@@ -305,7 +305,7 @@ M.organize_imports = function()
     for _, result in pairs(response.result or {}) do
       if result.edit then
         lsp.util.apply_workspace_edit(result.edit, "utf-16")
-      elseif result.command then
+      elseif result.command and result.command.command then
         lsp.buf.execute_command(result.command)
       end
     end
