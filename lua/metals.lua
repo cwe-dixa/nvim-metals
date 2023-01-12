@@ -296,7 +296,7 @@ M.organize_imports = function()
   local params = lsp.util.make_range_params()
   params.context = { diagnostics = {}, only = { "source.organizeImports" } }
   local resp = {}--lsp.buf_request_sync(0, "textDocument/codeAction", params, 1000)
-  local clients = lsp.get_active_clients({ buffer = 0, name = "metals" })
+  local clients = lsp.get_active_clients({ name = "metals" })
   for _, client in ipairs(clients) do
     resp = client.request_sync("textDocument/codeAction", params, 1000, 0)
   end
