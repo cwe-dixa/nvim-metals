@@ -295,7 +295,12 @@ end
 M.organize_imports = function()
   local params = lsp.util.make_range_params()
   params.context = { diagnostics = {}, only = { "source.organizeImports" } }
-  local resp = lsp.buf_request_sync(0, "textDocument/codeAction", params, 1000)
+  local resp = {}--lsp.buf_request_sync(0, "textDocument/codeAction", params, 1000)
+  local clients = lsp.get_active_clients({ buffer = 0, name = "metals" })
+  for _, client in ipairs(clients) do
+    resp = client.request_sync("textDocument/codeAction", params, 1000, 0)
+  end
+
 
   if not resp or vim.tbl_isempty(resp) then
     return
@@ -305,7 +310,7 @@ M.organize_imports = function()
     for _, result in pairs(response.result or {}) do
       if result.edit then
         lsp.util.apply_workspace_edit(result.edit, "utf-16")
-      elseif result.command and result.command.command then
+      elseif result.command then
         lsp.buf.execute_command(result.command)
       end
     end
