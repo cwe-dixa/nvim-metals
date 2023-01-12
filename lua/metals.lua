@@ -306,15 +306,15 @@ M.organize_imports = function()
     return
   end
 
-  for _, response in pairs(resp) do
-    for _, result in pairs(response.result or {}) do
+  --for _, response in pairs(resp) do
+    for _, result in pairs(resp.result or {}) do
       if result.edit then
         lsp.util.apply_workspace_edit(result.edit, "utf-16")
       elseif result.command then
         lsp.buf.execute_command(result.command)
       end
     end
-  end
+  --end
 end
 
 -- Used to fully restart Metals. This will send a shutdown request to Metals,
